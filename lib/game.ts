@@ -21,8 +21,8 @@ export default class Game {
       1000
     ); //      ⭡y
     //       z ↙⭢ x
-    this.camera.position.set(0, -900, 0);
-    this.camera.rotation.set(Math.PI / 2, 0, 0);
+    this.camera.position.set(0, 0, 100);
+    this.camera.rotation.set(0, 0, 0);
     this.scene = new THREE.Scene();
     const planeGeometry = new THREE.PlaneGeometry(100, 100, 100, 100); // 1 unit = 1 meter,
     for (
@@ -45,6 +45,7 @@ export default class Game {
     this.planeMesh.castShadow = true;
     this.planeMesh.receiveShadow = true;
     this.planeMesh.position.set(0, 0, 0);
+    this.planeMesh.rotation.set(Math.PI / 2 + 0.3, 0, 0);
     this.scene.add(this.planeMesh);
     //
     const lightAmbient = new THREE.AmbientLight(0xffffff, 0.05);
