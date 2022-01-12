@@ -22,6 +22,8 @@
   "homepage": "https://github.com/entozoon/cuberoids#readme",
   "dependencies": {
     "@types/three": "^0.136.1",
+    "examples": "^0.1.0",
+    "jsm": "0.0.1",
     "three": "^0.136.0"
   },
   "devDependencies": {
