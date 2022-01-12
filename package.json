@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/entozoon/cuberoids#readme",
   "dependencies": {
-    "@babylonjs/core": "^4.2.1",
-    "babylonjs": "^5.0.0-alpha.65"
+    "@types/three": "^0.136.1",
+    "three": "^0.136.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.8",

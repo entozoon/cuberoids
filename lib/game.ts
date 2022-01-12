@@ -1,119 +1,139 @@
-import * as BABYLON from "@babylonjs/core";
-// import * as dynamicTerrain from "./babylon.dynamicTerrain.js";
+import * as THREE from "three";
 export default class Game {
-  canvas!: HTMLCanvasElement;
-  engine!: BABYLON.Engine;
-  scene!: BABYLON.Scene;
-  camera!: BABYLON.FreeCamera | BABYLON.ArcRotateCamera;
-  light!: BABYLON.HemisphericLight;
-  constructor({ canvas }: { canvas: HTMLCanvasElement }) {
-    this.canvas = canvas;
-    this.engine = new BABYLON.Engine(this.canvas, true);
-    this.scene = new BABYLON.Scene(this.engine);
-    this.camera = this.initCamera();
-    this.light = new BABYLON.HemisphericLight(
-      "light",
-      this.camera.position,
-      this.scene
-    );
-    this.light.intensity = 0.8;
-    const axes = new BABYLON.AxesViewer(this.scene, 0.5);
-    // let test = BABYLON.Mesh.CreateBox("test", 0.5, this.scene);
-    // test.position.z = 1;
-    this.jank();
-    this.engine.runRenderLoop(() => {
-      this.scene.render();
-      // console.log({
-      //   x: Math.round(this.camera.position.x),
-      //   y: Math.round(this.camera.position.y),
-      //   z: Math.round(this.camera.position.z),
-      // });
+  camera: THREE.Camera;
+  scene: THREE.Scene;
+  renderer: THREE.WebGLRenderer;
+  box: THREE.BoxGeometry;
+  planeFill: THREE.Mesh;
+  planeGrid: THREE.Mesh;
+  light1;
+  lightbox1;
+  light2;
+  lightbox2;
+  constructor({ wrapper }: { wrapper: HTMLElement }) {
+    this.camera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      1000
+    ); // x,y,z (y is up)
+    this.camera.position.z = 100;
+    this.scene = new THREE.Scene();
+    // const box = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    // const material = new THREE.MeshNormalMaterial();
+    // this.mesh = new THREE.Mesh(box, material);
+    // this.scene.add(this.mesh);
+    const geometry = new THREE.PlaneGeometry(100, 100, 100, 100); // 1 unit = 1 meter,
+    // const material = new THREE.MeshBasicMaterial({
+    //   color: 0x992200,
+    //   // side: THREE.DoubleSide,
+    //   // wireframe: true,
+    //   // shadowSide: erm,
+    // });
+    // const material = new THREE.MeshPhongMaterial({
+    //   color: 0xffdddd,
+    //   // side: THREE.DoubleSide,
+    //   wireframe: true,
+    // });
+    //
+    // FILL
+    const materialFill = new THREE.MeshPhongMaterial({
+      color: 0x44aa44,
+      side: THREE.DoubleSide, // debug only
+      // shininess: 50,
+      // specular: 0xffffff,
+      // opacity: .6,
+      // transparent: true, // illusion of shadows.. but not real
+      // wireframe: true, // debug or.. maybe not? it's awesome. Maybe both! two layers
     });
-  }
-  private initCamera() {
-    // const camera = new BABYLON.UniversalCamera(
-    //   "camera",
-    //   // ↗ y: green
-    //   // ⭢x: red
-    //   // ↓ z: negative blue
-    //   // new BABYLON.Vector3(0, -2, -0.4),
-    //   // y: green
-    //   // ⭡↗ z: blue
-    //   //  ⭢ x: red
-    //   new BABYLON.Vector3(0, 1, -5), // up: y
-    //   this.scene
-    // );
-    const camera = new BABYLON.ArcRotateCamera(
-      "camera",
-      0,
-      0,
-      0,
-      new BABYLON.Vector3(0, 4, -5),
-      this.scene
-    );
-    camera.setTarget(new BABYLON.Vector3(0, 0, 0));
-    camera.attachControl(this.canvas, true);
-    return camera;
-  }
-  private jank = function () {
-    // vertices: x1,y1,z1, x2,y2,z2, ...
-    // HAS to be drawn anti-clockwise.. or it's flipped and invisible
-    // "Front-facing triangles are wound in counter-clockwise order"
-    // var positions = [-1, 0, 0, 0, 0, 0, 0, 0, 1];
-    let positions = [];
-    for (let x = 0; x < 10; x++) {
-      for (let z = 0; z < 10; z++) {
-        positions.push(...[x, 0, z]);
-      }
+    this.planeFill = new THREE.Mesh(geometry, materialFill);
+    this.planeFill.castShadow = true;
+    this.planeFill.receiveShadow = true;
+    this.scene.add(this.planeFill);
+    //
+    // GRID
+    const materialGrid = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      opacity: 0.1,
+      transparent: true,
+      side: THREE.DoubleSide, // debug only
+      wireframe: true,
+    });
+    this.planeGrid = new THREE.Mesh(geometry, materialGrid);
+    this.planeGrid.castShadow = true;
+    this.planeGrid.receiveShadow = true;
+    this.scene.add(this.planeGrid);
+
+    const lightAmbient = new THREE.AmbientLight(0x222222);
+    // lightAmbient.castShadow = true;
+    this.scene.add(lightAmbient);
+
+    this.light1 = new THREE.SpotLight(0x6666ff, 1);
+    this.light1.castShadow = true;
+    this.light1.position.set(5, 5, 0);
+    this.scene.add(this.light1);
+    const lightbox1Geometry = new THREE.BoxGeometry(1, 1, 1);
+    const lightbox1Material = new THREE.MeshBasicMaterial({ color: 0x6666ff });
+    this.lightbox1 = new THREE.Mesh(lightbox1Geometry, lightbox1Material);
+    this.lightbox1.position.set(5, 5, 0);
+    this.scene.add(this.lightbox1);
+
+    this.light2 = new THREE.SpotLight(0xff6666, 1);
+    this.light2.castShadow = true;
+    // this.light2.shadow.mapSize.width = 256;
+    // this.light2.shadow.mapSize.height = 256;
+    // this.light2.shadow.camera.near = 0.2; // default .5
+    // this.light2.shadow.camera.far = 10; // default 500
+    this.light2.position.set(5, 5, 0);
+    this.scene.add(this.light2);
+    const lightbox2Geometry = new THREE.BoxGeometry(1, 1, 1);
+    const lightbox2Material = new THREE.MeshBasicMaterial({ color: 0xff6666 });
+    this.lightbox2 = new THREE.Mesh(lightbox2Geometry, lightbox2Material);
+    this.lightbox2.position.set(5, 5, 0);
+    this.scene.add(this.lightbox2);
+    // const helper = new THREE.CameraHelper(this.light2.shadow.camera);
+    // this.scene.add(helper);
+
+    for (let i = 0; i < geometry.attributes.position.array.length; i += 3) {
+      // @ts-ignore
+      geometry.attributes.position.array[i + 2] =
+        Math.sin(i / 1000) * 2 + Math.random() * 2; // x, y, z++
     }
-    // var positions = [
-    //   //
-    //   0, 0, 0,
-    //   //
-    //   1, 0, 0,
-    //   //
-    //   1, 0, 1,
-    //   //
-    //   2, 0, 1,
-    //   //
-    //   2, 0, 2,
-    //   //
-    //   1, 0, 2,
-    // ];
-    // var indices = [0, 1, 2, 3];
-    var indices = [...Array(positions.length / 3).keys()];
-    // var colors = [
-    //   1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1,
-    // ];
-    let customMesh = new BABYLON.Mesh("custom", this.scene);
-    //Empty array to contain calculated values or normals added
-    let normals = [];
-    let vertexData = new BABYLON.VertexData();
-    BABYLON.VertexData.ComputeNormals(positions, indices, normals);
-    //Assign positions, indices and normals to vertexData
-    vertexData.positions = positions;
-    vertexData.indices = indices;
-    vertexData.normals = normals;
-    // vertexData.colors = colors;
-    //Apply vertexData to custom mesh
-    vertexData.applyToMesh(customMesh);
-    //Calculations of normals added
-    // BABYLON.VertexData.ComputeNormals(positions, indices, normals);
-    // var vertexData = new BABYLON.VertexData();
-    // vertexData.positions = positions;
-    // vertexData.indices = indices;
-    // vertexData.normals = normals;
-    // vertexData.applyToMesh(customMesh);
-    // customMesh.convertToFlatShadedMesh();
-    var mat = new BABYLON.StandardMaterial("", this.scene);
-    mat.backFaceCulling = false;
-    mat.diffuseTexture = new BABYLON.Texture(
-      "https://assets.babylonjs.com/environments/bricktile.jpg",
-      this.scene
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.BasicShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.setAnimationLoop(this.animation.bind(this));
+    wrapper.querySelector("canvas")?.remove();
+    wrapper.appendChild(this.renderer.domElement);
+  }
+  animation(time) {
+    this.planeFill.rotation.x = time / 5000;
+    this.planeGrid.rotation.x = time / 5000;
+    this.planeFill.rotation.y = time / 5000;
+    this.planeGrid.rotation.y = time / 5000;
+    this.lightbox1?.position.set(
+      Math.sin(time / 500) * 50,
+      Math.sin(time / 1000) * 50,
+      10
     );
-    customMesh.material = mat;
-    setInterval(() => {
-      mat.wireframe = !mat.wireframe;
-    }, 1000);
-  };
+    this.light1?.position.set(
+      Math.sin(time / 500) * 50,
+      Math.sin(time / 1000) * 50,
+      10
+    );
+    this.lightbox2?.position.set(
+      Math.cos(-time / 1000) * 50,
+      Math.sin(time / 1000) * 50,
+      10
+    );
+    this.light2?.position.set(
+      Math.cos(-time / 1000) * 50,
+      Math.sin(time / 1000) * 50,
+      10
+    );
+
+    this.renderer.render(this.scene, this.camera);
+  }
 }

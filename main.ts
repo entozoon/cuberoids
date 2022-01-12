@@ -1,7 +1,7 @@
 import Game from "./lib/game";
 const initGame = (): void => {
-  const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
-  const game = new Game({ canvas });
+  const wrapper = document.querySelector(".game-wrapper") as HTMLElement;
+  const game = new Game({ wrapper });
 };
 window.addEventListener("DOMContentLoaded", initGame);
 // @ts-ignore
