@@ -1,119 +1,38 @@
-import * as BABYLON from "@babylonjs/core";
-// import * as dynamicTerrain from "./babylon.dynamicTerrain.js";
+import * as THREE from "three";
 export default class Game {
-  canvas!: HTMLCanvasElement;
-  engine!: BABYLON.Engine;
-  scene!: BABYLON.Scene;
-  camera!: BABYLON.FreeCamera | BABYLON.ArcRotateCamera;
-  light!: BABYLON.HemisphericLight;
+  camera: THREE.Camera;
+  scene: THREE.Scene;
+  renderer: THREE.WebGLRenderer;
+  box: THREE.BoxGeometry;
+  material: THREE.Material;
+  mesh: THREE.Mesh;
   constructor({ canvas }: { canvas: HTMLCanvasElement }) {
-    this.canvas = canvas;
-    this.engine = new BABYLON.Engine(this.canvas, true);
-    this.scene = new BABYLON.Scene(this.engine);
-    this.camera = this.initCamera();
-    this.light = new BABYLON.HemisphericLight(
-      "light",
-      this.camera.position,
-      this.scene
-    );
-    this.light.intensity = 0.8;
-    const axes = new BABYLON.AxesViewer(this.scene, 0.5);
-    // let test = BABYLON.Mesh.CreateBox("test", 0.5, this.scene);
-    // test.position.z = 1;
-    this.jank();
-    this.engine.runRenderLoop(() => {
-      this.scene.render();
-      // console.log({
-      //   x: Math.round(this.camera.position.x),
-      //   y: Math.round(this.camera.position.y),
-      //   z: Math.round(this.camera.position.z),
-      // });
-    });
+    this.init();
   }
-  private initCamera() {
-    // const camera = new BABYLON.UniversalCamera(
-    //   "camera",
-    //   // ↗ y: green
-    //   // ⭢x: red
-    //   // ↓ z: negative blue
-    //   // new BABYLON.Vector3(0, -2, -0.4),
-    //   // y: green
-    //   // ⭡↗ z: blue
-    //   //  ⭢ x: red
-    //   new BABYLON.Vector3(0, 1, -5), // up: y
-    //   this.scene
-    // );
-    const camera = new BABYLON.ArcRotateCamera(
-      "camera",
-      0,
-      0,
-      0,
-      new BABYLON.Vector3(0, 4, -5),
-      this.scene
+  init() {
+    this.camera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      10
     );
-    camera.setTarget(new BABYLON.Vector3(0, 0, 0));
-    camera.attachControl(this.canvas, true);
-    return camera;
+    this.camera.position.z = 1;
+    this.scene = new THREE.Scene();
+    this.box = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    this.material = new THREE.MeshNormalMaterial();
+    this.mesh = new THREE.Mesh(this.box, this.material);
+    this.scene.add(this.mesh);
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setAnimationLoop(this.animation.bind(this));
+    document.querySelector(".game-wrapper canvas")?.remove();
+    document
+      .querySelector(".game-wrapper")
+      .appendChild(this.renderer.domElement);
   }
-  private jank = function () {
-    // vertices: x1,y1,z1, x2,y2,z2, ...
-    // HAS to be drawn anti-clockwise.. or it's flipped and invisible
-    // "Front-facing triangles are wound in counter-clockwise order"
-    // var positions = [-1, 0, 0, 0, 0, 0, 0, 0, 1];
-    let positions = [];
-    for (let x = 0; x < 10; x++) {
-      for (let z = 0; z < 10; z++) {
-        positions.push(...[x, 0, z]);
-      }
-    }
-    // var positions = [
-    //   //
-    //   0, 0, 0,
-    //   //
-    //   1, 0, 0,
-    //   //
-    //   1, 0, 1,
-    //   //
-    //   2, 0, 1,
-    //   //
-    //   2, 0, 2,
-    //   //
-    //   1, 0, 2,
-    // ];
-    // var indices = [0, 1, 2, 3];
-    var indices = [...Array(positions.length / 3).keys()];
-    // var colors = [
-    //   1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1,
-    // ];
-    let customMesh = new BABYLON.Mesh("custom", this.scene);
-    //Empty array to contain calculated values or normals added
-    let normals = [];
-    let vertexData = new BABYLON.VertexData();
-    BABYLON.VertexData.ComputeNormals(positions, indices, normals);
-    //Assign positions, indices and normals to vertexData
-    vertexData.positions = positions;
-    vertexData.indices = indices;
-    vertexData.normals = normals;
-    // vertexData.colors = colors;
-    //Apply vertexData to custom mesh
-    vertexData.applyToMesh(customMesh);
-    //Calculations of normals added
-    // BABYLON.VertexData.ComputeNormals(positions, indices, normals);
-    // var vertexData = new BABYLON.VertexData();
-    // vertexData.positions = positions;
-    // vertexData.indices = indices;
-    // vertexData.normals = normals;
-    // vertexData.applyToMesh(customMesh);
-    // customMesh.convertToFlatShadedMesh();
-    var mat = new BABYLON.StandardMaterial("", this.scene);
-    mat.backFaceCulling = false;
-    mat.diffuseTexture = new BABYLON.Texture(
-      "https://assets.babylonjs.com/environments/bricktile.jpg",
-      this.scene
-    );
-    customMesh.material = mat;
-    setInterval(() => {
-      mat.wireframe = !mat.wireframe;
-    }, 1000);
-  };
+  animation(time) {
+    this.mesh.rotation.x = time / 2000;
+    this.mesh.rotation.y = time / 100;
+    this.renderer.render(this.scene, this.camera);
+  }
 }
