@@ -11,9 +11,6 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "paths": {
-      "babylonjs": ["node_modules/babylonjs/babylon.d.ts"]
-    },
     "allowSyntheticDefaultImports": true
   }
 }
