@@ -11,19 +11,57 @@ export default class Game {
     this.hero = new Hero();
     //
     // GUFF
-    const geometry = new THREE.BoxGeometry(100, 100, 100);
-    const material = new THREE.MeshPhongMaterial({
-      side: THREE.DoubleSide, // debug only
-      color: 0x00aa55,
-    });
-    // this.material.castShadow = true;
-    // this.material.receiveShadow = true;
-    const cube = new THREE.Mesh(geometry, material);
-    cube.castShadow = true;
-    cube.receiveShadow = true;
-    cube.position.set(0, 0, -100);
-    scene.add(cube);
-    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.05);
+    const geometry = new THREE.BoxGeometry(20, 20, 20);
+
+    const cube1 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide, // debug only
+        color: 0x00aa55,
+      })
+    );
+    cube1.castShadow = true;
+    cube1.receiveShadow = true;
+    cube1.position.set(0, 0, -100);
+    scene.add(cube1);
+    //
+    const cube2 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide, // debug only
+        color: 0xff0000,
+      })
+    );
+    cube2.castShadow = true;
+    cube2.receiveShadow = true;
+    cube2.position.set(-100, 0, 0);
+    scene.add(cube2);
+    //
+    const cube3 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide, // debug only
+        color: 0x0000ff,
+      })
+    );
+    cube3.castShadow = true;
+    cube3.receiveShadow = true;
+    cube3.position.set(100, 0, 0);
+    scene.add(cube3);
+    //
+    const cube4 = new THREE.Mesh(
+      geometry,
+      new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide, // debug only
+        color: 0xffff00,
+      })
+    );
+    cube4.castShadow = true;
+    cube4.receiveShadow = true;
+    cube4.position.set(0, 0, 100);
+    scene.add(cube4);
+    //
+    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(lightAmbient);
   }
   loop(time) {

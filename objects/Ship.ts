@@ -13,8 +13,16 @@ export default class {
   private torch;
   constructor() {
     const geometry = new THREE.BoxGeometry(6, 1, 2);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    this.object = new THREE.Mesh(geometry, material);
+    this.object = new THREE.Mesh(
+      geometry,
+      new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide, // debug only
+        color: 0xaaaaaa,
+        wireframe: true,
+      })
+    );
+    this.object.castShadow = true;
+    this.object.receiveShadow = true;
     scene.add(this.object);
     this.torch = createTorch();
     this.object.add(this.torch);

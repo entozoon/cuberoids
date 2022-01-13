@@ -21,14 +21,30 @@ export default class {
     }
     // Will scrap when figuring out impulse
     if (key === "w") {
-      _rotation.add(new Vector3(0.1, 0, 0));
+      // _rotation.add(new Vector3(-0.1, 0, 0));
+      this.parent.body.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
+    }
+    if (key === "s") {
+      // _rotation.add(new Vector3(0.1, 0, 0));
+      this.parent.body.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
     }
     if (key === "e") {
-      _rotation.add(new Vector3(0, 0.1, 0));
+      // _rotation.add(new Vector3(0, -0.1, 0));
+      this.parent.body.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
+    }
+    if (key === "q") {
+      // _rotation.add(new Vector3(0, 0.1, 0));
+      this.parent.body.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
     }
     if (key === "d") {
-      _rotation.add(new Vector3(0, 0, 0.1));
+      // _rotation.add(new Vector3(0, 0, -0.1));
+      this.parent.body.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
     }
-    rotation.setFromVector3(_rotation);
+    if (key === "a") {
+      // _rotation.add(new Vector3(0, 0, 0.1));
+      this.parent.body.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
+    }
+    // rotation.setFromVector3(_rotation);
+    // console.log(this.parent.body.object.rotation.toVector3());
   }
 }
