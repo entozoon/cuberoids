@@ -1,14 +1,13 @@
 import { Hero } from "./entities/Hero";
 import * as THREE from "three";
-import { renderer, scene } from "./engine/renderer";
+import { renderer, reset, scene } from "./engine/renderer";
 export const anaglyphMode = false;
 export default class Game {
-  cam: Camera;
   hero;
   constructor() {
+    reset();
     renderer.setAnimationLoop(this.loop.bind(this));
     this.hero = new Hero();
-    console.log(this.hero);
     //
     // GUFF
     const geometry = new THREE.BoxGeometry(100, 100, 100);

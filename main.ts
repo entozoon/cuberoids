@@ -1,7 +1,13 @@
 import Game from "./game";
 const initGame = (): void => {
-  const game = new Game();
+  new Game();
 };
 window.addEventListener("DOMContentLoaded", initGame);
 // @ts-ignore
-module.hot && module.hot.accept(initGame);
+module.hot &&
+  // @ts-ignore
+  module.hot.accept(() => {
+    initGame();
+    // More brutal
+    // window.location.reload();
+  });

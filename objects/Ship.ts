@@ -22,9 +22,10 @@ export class Ship {
     // scene.add(new THREE.CameraHelper(this.torch.shadow.camera));
   }
   update(time) {
-    this.object.position.x = Math.sin(time / 1000) * 20;
-    this.object.position.y = Math.cos(time / 1000) * 100;
-    this.object.position.z = Math.cos(time / 1000) * 20;
+    // Test
+    // this.object.position.x = Math.sin(time / 1000) * 20;
+    // this.object.position.y = Math.cos(time / 1000) * 100;
+    // this.object.position.z = Math.cos(time / 1000) * 20;
     this.torch.position.set(
       this.object.position.x,
       this.object.position.y,

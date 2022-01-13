@@ -15,7 +15,9 @@ const Renderer = (wrapper: HTMLElement) => {
   wrapper.appendChild(renderer.domElement);
   return anaglyphMode ? new AnaglyphEffect(renderer) : renderer;
 };
-export const renderer = Renderer(
-  document.querySelector(".game-wrapper") as HTMLElement
-);
-export const scene = new THREE.Scene();
+export let renderer;
+export let scene;
+export const reset = () => {
+  renderer = Renderer(document.querySelector(".game-wrapper") as HTMLElement);
+  scene = new THREE.Scene();
+};
