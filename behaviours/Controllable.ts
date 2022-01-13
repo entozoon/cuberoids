@@ -10,14 +10,33 @@ export default class {
   keypress(e) {
     const { key } = e;
     const { position, rotation } = this.parent.body.object;
+    const quaternion: THREE.Quaternion = this.parent.body.object.quaternion;
     if (this.reservedKeys.includes(key)) {
       e.stopPropagation();
       e.preventDefault();
     }
     let _rotation = rotation.toVector3();
     if (key === " ") {
-      // Incorrect for orientation, but yeah. normals?
-      position.set(0, 0, position.z - 1);
+      // position.set(0, 0, position.z - 1);
+      // Yeah I've no idea what I'm doing. How to get a perpendicular angle..
+      // https://threejs.org/docs/index.html?q=quaternion#api/en/math/Quaternion
+      console.log(
+        "\nquaternion\n",
+        quaternion.toArray().join(", ")
+        // "\nconjugate\n"
+        // the same rotation in the opposite direction about the rotational axis.
+        // quaternion.clone().conjugate().toArray().join(", "),
+        // "\nnormalize\n",
+        // quaternion.clone().normalize().toArray().join(", ")
+      );
+      //  position.set(...position.add(rotation.toVector3().normalize()).toArray());
+      // this.parent.body.object.translateZ(-10);
+      console.log(rotation.toVector3());
+      rotation.order = "YXZ"; // !!
+      this.parent.body.object.translateOnAxis(
+        rotation.toVector3().normalize(),
+        10
+      );
     }
     // Will scrap when figuring out impulse
     if (key === "w") {
@@ -44,7 +63,5 @@ export default class {
       // _rotation.add(new Vector3(0, 0, 0.1));
       this.parent.body.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
     }
-    // rotation.setFromVector3(_rotation);
-    // console.log(this.parent.body.object.rotation.toVector3());
   }
 }
