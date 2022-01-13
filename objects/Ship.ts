@@ -8,7 +8,7 @@ const createTorch = () => {
   // torch.shadow.camera.far = 1000; // default 500
   return torch;
 };
-export class Ship {
+export default class {
   public object: THREE.Object3D;
   private torch;
   constructor() {

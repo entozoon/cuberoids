@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { scene } from "./renderer";
-export class Camera {
+export default class {
   camera: THREE.Camera;
   pov: THREE.Object3D;
   constructor({ pov }: { pov: THREE.Object3D }) {

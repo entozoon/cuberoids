@@ -1,12 +1,13 @@
-import { Hero } from "./entities/Hero";
+import Hero from "./entities/Hero";
 import * as THREE from "three";
 import { renderer, reset, scene } from "./engine/renderer";
 export const anaglyphMode = false;
 export default class Game {
-  hero;
+  private hero;
   constructor() {
     reset();
     renderer.setAnimationLoop(this.loop.bind(this));
+    delete this.hero;
     this.hero = new Hero();
     //
     // GUFF
