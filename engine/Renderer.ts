@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { AnaglyphEffect } from "./AnaglyphEffect.js";
 import { anaglyphMode } from "../game";
-
 const Renderer = (wrapper: HTMLElement) => {
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -19,5 +18,4 @@ const Renderer = (wrapper: HTMLElement) => {
 export const renderer = Renderer(
   document.querySelector(".game-wrapper") as HTMLElement
 );
-
 export const scene = new THREE.Scene();

@@ -1,13 +1,16 @@
+import { Camera } from "../engine/Camera";
 import { Ship } from "../objects/Ship";
 export class Hero {
-  // public ship = new Ship(scene);
+  // public ship = new Ship( );
   public ship;
-  constructor(scene: THREE.Scene) {
-    Object.assign(this, new Ship(scene));
-    this.ship = new Ship(scene);
-    console.log(this);
+  public cam;
+  constructor() {
+    // Object.assign(this, new Ship());
+    this.ship = new Ship();
+    this.cam = new Camera({ pov: this.ship.object });
   }
-  update(time) {
-    this.ship.update();
+  public update(time) {
+    this.ship.update(time);
+    this.cam.update(time);
   }
 }

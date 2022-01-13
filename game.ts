@@ -1,6 +1,5 @@
 import { Hero } from "./entities/Hero";
 import * as THREE from "three";
-import { Camera } from "./engine/Camera";
 import { renderer, scene } from "./engine/renderer";
 export const anaglyphMode = false;
 export default class Game {
@@ -8,8 +7,8 @@ export default class Game {
   hero;
   constructor() {
     renderer.setAnimationLoop(this.loop.bind(this));
-    this.hero = new Hero(scene);
-    this.cam = new Camera({ pov: this.hero.object, scene });
+    this.hero = new Hero();
+    console.log(this.hero);
     //
     // GUFF
     const geometry = new THREE.BoxGeometry(100, 100, 100);
@@ -28,8 +27,7 @@ export default class Game {
     scene.add(lightAmbient);
   }
   loop(time) {
-    renderer.render(scene, this.cam.camera);
     this.hero.update(time);
-    this.cam.update();
+    renderer.render(scene, this.hero.cam.camera);
   }
 }

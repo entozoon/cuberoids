@@ -22,6 +22,7 @@
   "homepage": "https://github.com/entozoon/cuberoids#readme",
   "dependencies": {
     "@types/three": "^0.136.1",
+    "engine": "^1.0.0",
     "examples": "^0.1.0",
     "jsm": "0.0.1",
     "objects": "^0.3.0",

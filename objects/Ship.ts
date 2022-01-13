@@ -1,3 +1,4 @@
+import { scene } from "../engine/renderer";
 import * as THREE from "three";
 const createTorch = () => {
   //  SpotLight / DirectionalLight / PointLight
@@ -10,7 +11,7 @@ const createTorch = () => {
 export class Ship {
   public object: THREE.Object3D;
   private torch;
-  constructor(scene: THREE.Scene) {
+  constructor() {
     const geometry = new THREE.BoxGeometry(6, 1, 2);
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
     this.object = new THREE.Mesh(geometry, material);

@@ -1,8 +1,9 @@
 import * as THREE from "three";
+import { scene } from "./renderer";
 export class Camera {
   camera: THREE.Camera;
   pov: THREE.Object3D;
-  constructor({ pov, scene }: { pov: THREE.Object3D; scene: THREE.Scene }) {
+  constructor({ pov }: { pov: THREE.Object3D }) {
     this.pov = pov;
     this.camera = new THREE.PerspectiveCamera(
       70,
@@ -11,7 +12,7 @@ export class Camera {
     //       z ↙⭢ x
     scene.add(this.camera);
   }
-  update() {
+  public update() {
     this.camera.position.set(
       this.pov.position.x,
       this.pov.position.y + 10,
