@@ -24,6 +24,7 @@
     "@types/three": "^0.136.1",
     "examples": "^0.1.0",
     "jsm": "0.0.1",
+    "objects": "^0.3.0",
     "three": "^0.136.0"
   },
   "devDependencies": {

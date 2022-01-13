@@ -4,7 +4,7 @@ const createTorch = () => {
   const torch = new THREE.SpotLight(0xffffff, 1);
   torch.castShadow = true;
   torch.shadow.camera.near = 100; // default .5 (flickering)
-  // torch.shadow.camera.far = 10; // default 500
+  // torch.shadow.camera.far = 1000; // default 500
   return torch;
 };
 export class Ship {

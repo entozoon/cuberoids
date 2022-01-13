@@ -1,7 +1,6 @@
-import Game from "./lib/game";
+import Game from "./game";
 const initGame = (): void => {
-  const wrapper = document.querySelector(".game-wrapper") as HTMLElement;
-  const game = new Game({ wrapper });
+  const game = new Game();
 };
 window.addEventListener("DOMContentLoaded", initGame);
 // @ts-ignore
