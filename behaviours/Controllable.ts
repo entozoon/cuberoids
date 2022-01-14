@@ -9,8 +9,18 @@ export default class {
   }
   keypress(e) {
     const { key } = e;
-    const { position, rotation } = this.parent.body.object;
-    const quaternion: THREE.Quaternion = this.parent.body.object.quaternion;
+    const {
+      position,
+      rotation,
+      matrixWorld,
+      quaternion,
+    }: {
+      position: THREE.Vector3;
+      rotation: THREE.Euler;
+      matrixWorld: THREE.Matrix4;
+      quaternion: THREE.Quaternion;
+    } = this.parent.body.object;
+    // const quaternion: THREE.Quaternion = this.parent.body.object.quaternion;
     if (this.reservedKeys.includes(key)) {
       e.stopPropagation();
       e.preventDefault();
@@ -22,21 +32,24 @@ export default class {
       // https://threejs.org/docs/index.html?q=quaternion#api/en/math/Quaternion
       console.log(
         "\nquaternion\n",
-        quaternion.toArray().join(", ")
+        quaternion.toArray().join(", "),
         // "\nconjugate\n"
         // the same rotation in the opposite direction about the rotational axis.
         // quaternion.clone().conjugate().toArray().join(", "),
         // "\nnormalize\n",
         // quaternion.clone().normalize().toArray().join(", ")
+        "\nmatrix\n",
+        matrixWorld.toArray()
       );
       //  position.set(...position.add(rotation.toVector3().normalize()).toArray());
       // this.parent.body.object.translateZ(-10);
-      console.log(rotation.toVector3());
-      rotation.order = "YXZ"; // !!
-      this.parent.body.object.translateOnAxis(
-        rotation.toVector3().normalize(),
-        10
-      );
+      // console.log(this.parent.body);
+      // rotation.order = "YXZ"; // !!
+      this.parent.body.object.translateZ(-10);
+      // this.parent.body.object.translateOnAxis(
+      //   rotation.toVector3().normalize(),
+      //   10
+      // );
     }
     // Will scrap when figuring out impulse
     if (key === "w") {
