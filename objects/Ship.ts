@@ -17,12 +17,22 @@ export default class {
     forward: {
       speed: 0, // m/s
       acceleration: 2,
-      drag: 0.2,
+      drag: 1,
     },
     yaw: {
       speed: 0,
-      acceleration: 0.5,
-      drag: 0.2,
+      acceleration: 0.1,
+      drag: 0.05,
+    },
+    pitch: {
+      speed: 0,
+      acceleration: 0.1,
+      drag: 0.05,
+    },
+    roll: {
+      speed: 0,
+      acceleration: 0.1,
+      drag: 0.05,
     },
   };
   constructor() {
@@ -44,12 +54,9 @@ export default class {
     this.object.add(this.torch, this.torch.target);
     // scene.add(new THREE.CameraHelper(this.torch.shadow.camera)); // ***
   }
-  public impulse(sign = 1) {
-    this.impulses.forward.speed += this.impulses.forward.acceleration * sign;
-  }
-  public yaw(sign = 1) {
-    this.impulses.yaw.speed += this.impulses.yaw.acceleration * sign;
-    // console.log(this.impulses.yaw.speed);
+  public move(direction, sign = 1) {
+    this.impulses[direction].speed +=
+      this.impulses[direction].acceleration * sign;
   }
   update() {
     const _dt = dt();
@@ -69,6 +76,14 @@ export default class {
     this.object.rotateOnAxis(
       new Vector3(0, -1, 0),
       this.impulses.yaw.speed * _dt
+    );
+    this.object.rotateOnAxis(
+      new Vector3(1, 0, 0),
+      this.impulses.pitch.speed * _dt
+    );
+    this.object.rotateOnAxis(
+      new Vector3(0, 0, -1),
+      this.impulses.roll.speed * _dt
     );
     if (Math.random() > 0.9) {
       console.log(

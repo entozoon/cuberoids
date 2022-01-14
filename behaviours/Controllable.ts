@@ -72,13 +72,25 @@ export default class {
   public update() {
     const { ship } = this.parent;
     if (this.keyFind(" ").pressed) {
-      ship.impulse(1);
+      ship.move("forward", 1);
     }
     if (this.keyFind("q").pressed) {
-      ship.yaw(-1);
+      ship.move("yaw", -1);
     }
     if (this.keyFind("e").pressed) {
-      ship.yaw(1);
+      ship.move("yaw", 1);
+    }
+    if (this.keyFind("w").pressed) {
+      ship.move("pitch", -1);
+    }
+    if (this.keyFind("s").pressed) {
+      ship.move("pitch", 1);
+    }
+    if (this.keyFind("a").pressed) {
+      ship.move("roll", -1);
+    }
+    if (this.keyFind("d").pressed) {
+      ship.move("roll", 1);
     }
   }
 }
