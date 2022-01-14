@@ -60,18 +60,18 @@ export default class Game {
     cube4.position.set(0, 0, 100);
     scene.add(cube4);
     //
-    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.05);
+    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(lightAmbient);
     //
     setInterval(() => {
       // cube1.rotation.set(0, cube1.rotation.y + 10, 0);
-      cube1.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 32);
+      cube1.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 320);
       cube1.rotation.order = "YXZ";
       // console.log(cube1.rotation);
-    }, 300);
+    }, 100);
   }
   loop(time) {
-    this.hero.update(time);
+    this.hero.update();
     renderer.render(scene, this.hero.cam.camera);
   }
 }

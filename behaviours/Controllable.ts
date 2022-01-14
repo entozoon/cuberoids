@@ -1,80 +1,84 @@
 import { Vector3 } from "three";
-
 export default class {
   private parent;
-  private reservedKeys = ["w", "a", "s", "d", "q", "e", " "];
+  private keys = [
+    { key: "q", pressed: false },
+    { key: "w", pressed: false },
+    { key: "e", pressed: false },
+    { key: "a", pressed: false },
+    { key: "s", pressed: false },
+    { key: "d", pressed: false },
+    { key: " ", pressed: false },
+  ];
+  private keysReserved = this.keys.map((k) => k.key);
+  private keyFind = (key) => this.keys.find((k) => k.key === key);
   constructor(parent) {
     this.parent = parent;
-    document.body.addEventListener("keydown", this.keypress.bind(this), false);
+    document.body.addEventListener("keydown", this.keydown.bind(this), false);
+    document.body.addEventListener("keyup", this.keyup.bind(this), false);
   }
-  keypress(e) {
-    const { key } = e;
+  keydown(e) {
+    const key = this.keyFind(e.key);
+    if (!key) return;
+    e.stopPropagation();
+    e.preventDefault();
+    if (!key.pressed) {
+      key.pressed = true;
+      this.actions();
+    }
+  }
+  keyup(e) {
+    const key = this.keyFind(e.key);
+    if (!key) return;
+    key.pressed = false;
+  }
+  actions() {
     const {
       position,
       rotation,
-      matrixWorld,
-      quaternion,
-    }: {
+    }: // matrixWorld,
+    // quaternion,
+    {
       position: THREE.Vector3;
       rotation: THREE.Euler;
-      matrixWorld: THREE.Matrix4;
-      quaternion: THREE.Quaternion;
+      // matrixWorld: THREE.Matrix4;
+      // quaternion: THREE.Quaternion;
     } = this.parent.ship.object;
-    // const quaternion: THREE.Quaternion = this.parent.ship.object.quaternion;
-    if (this.reservedKeys.includes(key)) {
-      e.stopPropagation();
-      e.preventDefault();
+    // if (key === "w") {
+    //   // _rotation.add(new Vector3(-0.1, 0, 0));
+    //   ship.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
+    // }
+    // if (key === "s") {
+    //   // _rotation.add(new Vector3(0.1, 0, 0));
+    //   ship.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
+    // }
+    // if (key === "e") {
+    //   // _rotation.add(new Vector3(0, -0.1, 0));
+    //   ship.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
+    // }
+    // if (key === "q") {
+    //   // _rotation.add(new Vector3(0, 0.1, 0));
+    //   ship.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
+    // }
+    // if (key === "d") {
+    //   // _rotation.ad       d(new Vector3(0, 0, -0.1));
+    //   ship.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
+    // }
+    // if (key === "a") {
+    //   // _rotation.add(new Vector3(0, 0, 0.1));
+    //   ship.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
+    // }
+  }
+  public update() {
+    const { ship } = this.parent;
+    if (this.keyFind(" ").pressed) {
+      ship.impulse(1);
     }
-    let _rotation = rotation.toVector3();
-    if (key === " ") {
-      // position.set(0, 0, position.z - 1);
-      // Yeah I've no idea what I'm doing. How to get a perpendicular angle..
-      // https://threejs.org/docs/index.html?q=quaternion#api/en/math/Quaternion
-      console.log(
-        "\nquaternion\n",
-        quaternion.toArray().join(", "),
-        // "\nconjugate\n"
-        // the same rotation in the opposite direction about the rotational axis.
-        // quaternion.clone().conjugate().toArray().join(", "),
-        // "\nnormalize\n",
-        // quaternion.clone().normalize().toArray().join(", ")
-        "\nmatrix\n",
-        matrixWorld.toArray()
-      );
-      //  position.set(...position.add(rotation.toVector3().normalize()).toArray());
-      // this.parent.ship.object.translateZ(-10);
-      // console.log(this.parent.ship);
-      // rotation.order = "YXZ"; // !!
-      this.parent.ship.object.translateZ(-10);
-      // this.parent.ship.object.translateOnAxis(
-      //   rotation.toVector3().normalize(),
-      //   10
-      // );
+    if (this.keyFind("q").pressed) {
+      ship.yaw(-1);
     }
-    // Will scrap when figuring out impulse
-    if (key === "w") {
-      // _rotation.add(new Vector3(-0.1, 0, 0));
-      this.parent.ship.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
-    }
-    if (key === "s") {
-      // _rotation.add(new Vector3(0.1, 0, 0));
-      this.parent.ship.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
-    }
-    if (key === "e") {
-      // _rotation.add(new Vector3(0, -0.1, 0));
-      this.parent.ship.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
-    }
-    if (key === "q") {
-      // _rotation.add(new Vector3(0, 0.1, 0));
-      this.parent.ship.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
-    }
-    if (key === "d") {
-      // _rotation.add(new Vector3(0, 0, -0.1));
-      this.parent.ship.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
-    }
-    if (key === "a") {
-      // _rotation.add(new Vector3(0, 0, 0.1));
-      this.parent.ship.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
+    if (this.keyFind("e").pressed) {
+      ship.yaw(1);
     }
   }
 }

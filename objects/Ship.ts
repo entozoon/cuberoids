@@ -1,5 +1,7 @@
-import { scene } from "../engine/renderer";
+import { dt, dt, scene } from "../engine/renderer";
 import * as THREE from "three";
+import { Vector3 } from "three";
+import { between } from "../lib/utils";
 const createTorch = () => {
   //  SpotLight / DirectionalLight / PointLight
   const torch = new THREE.SpotLight(0xffffff, 1);
@@ -11,6 +13,18 @@ const createTorch = () => {
 export default class {
   public object: THREE.Object3D;
   private torch;
+  private impulses = {
+    forward: {
+      speed: 0, // m/s
+      acceleration: 2,
+      drag: 0.2,
+    },
+    yaw: {
+      speed: 0,
+      acceleration: 0.5,
+      drag: 0.2,
+    },
+  };
   constructor() {
     const geometry = new THREE.BoxGeometry(6, 1, 2);
     this.object = new THREE.Mesh(
@@ -30,10 +44,39 @@ export default class {
     this.object.add(this.torch, this.torch.target);
     // scene.add(new THREE.CameraHelper(this.torch.shadow.camera)); // ***
   }
-  update(time) {
-    // Test
-    // this.object.position.x = Math.sin(time / 1000) * 20;
-    // this.object.position.y = Math.cos(time / 1000) * 100;
-    // this.object.position.z = Math.cos(time / 1000) * 20;
+  public impulse(sign = 1) {
+    this.impulses.forward.speed += this.impulses.forward.acceleration * sign;
+  }
+  public yaw(sign = 1) {
+    this.impulses.yaw.speed += this.impulses.yaw.acceleration * sign;
+    // console.log(this.impulses.yaw.speed);
+  }
+  update() {
+    const _dt = dt();
+    for (const direction in this.impulses) {
+      const impulse = this.impulses[direction];
+      // impulse.speed -= impulse.drag;
+      impulse.speed =
+        impulse.speed === 0
+          ? impulse.speed
+          : impulse.speed - impulse.drag * Math.sign(impulse.speed);
+      // Gets flappy, so snap to 0 in like -.1->.1 (based on drag value)
+      impulse.speed = between(impulse.speed, -impulse.drag, impulse.drag)
+        ? 0
+        : impulse.speed;
+    }
+    this.object.translateZ(-this.impulses.forward.speed * _dt);
+    this.object.rotateOnAxis(
+      new Vector3(0, -1, 0),
+      this.impulses.yaw.speed * _dt
+    );
+    if (Math.random() > 0.9) {
+      console.log(
+        this.impulses.forward.speed
+        // _dt,
+        // Math.sign(this.impulses.forward.speed)
+      );
+      // console.log(this.impulses);
+    }
   }
 }
