@@ -60,7 +60,7 @@ export default class Game {
     cube4.position.set(0, 0, 100);
     scene.add(cube4);
     //
-    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.5);
+    const lightAmbient = new THREE.AmbientLight(0xffffff, 0.05);
     scene.add(lightAmbient);
     //
     setInterval(() => {

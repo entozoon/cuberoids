@@ -18,31 +18,22 @@ export default class {
       new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide, // debug only
         color: 0xaaaaaa,
-        wireframe: true,
+        // wireframe: true,
       })
     );
     this.object.castShadow = true;
     this.object.receiveShadow = true;
     scene.add(this.object);
     this.torch = createTorch();
-    this.object.add(this.torch);
-    scene.add(this.torch, this.torch.target);
-    // scene.add(new THREE.CameraHelper(this.torch.shadow.camera));
+    this.torch.position.z = -5;
+    this.torch.target.position.z = -20;
+    this.object.add(this.torch, this.torch.target);
+    // scene.add(new THREE.CameraHelper(this.torch.shadow.camera)); // ***
   }
   update(time) {
     // Test
     // this.object.position.x = Math.sin(time / 1000) * 20;
     // this.object.position.y = Math.cos(time / 1000) * 100;
     // this.object.position.z = Math.cos(time / 1000) * 20;
-    this.torch.position.set(
-      this.object.position.x,
-      this.object.position.y,
-      this.object.position.z - 5
-    );
-    this.torch.target.position.set(
-      this.object.position.x,
-      this.object.position.y,
-      this.object.position.z - 100
-    );
   }
 }

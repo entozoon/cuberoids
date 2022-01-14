@@ -19,8 +19,8 @@ export default class {
       rotation: THREE.Euler;
       matrixWorld: THREE.Matrix4;
       quaternion: THREE.Quaternion;
-    } = this.parent.body.object;
-    // const quaternion: THREE.Quaternion = this.parent.body.object.quaternion;
+    } = this.parent.ship.object;
+    // const quaternion: THREE.Quaternion = this.parent.ship.object.quaternion;
     if (this.reservedKeys.includes(key)) {
       e.stopPropagation();
       e.preventDefault();
@@ -42,11 +42,11 @@ export default class {
         matrixWorld.toArray()
       );
       //  position.set(...position.add(rotation.toVector3().normalize()).toArray());
-      // this.parent.body.object.translateZ(-10);
-      // console.log(this.parent.body);
+      // this.parent.ship.object.translateZ(-10);
+      // console.log(this.parent.ship);
       // rotation.order = "YXZ"; // !!
-      this.parent.body.object.translateZ(-10);
-      // this.parent.body.object.translateOnAxis(
+      this.parent.ship.object.translateZ(-10);
+      // this.parent.ship.object.translateOnAxis(
       //   rotation.toVector3().normalize(),
       //   10
       // );
@@ -54,27 +54,27 @@ export default class {
     // Will scrap when figuring out impulse
     if (key === "w") {
       // _rotation.add(new Vector3(-0.1, 0, 0));
-      this.parent.body.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
     }
     if (key === "s") {
       // _rotation.add(new Vector3(0.1, 0, 0));
-      this.parent.body.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
     }
     if (key === "e") {
       // _rotation.add(new Vector3(0, -0.1, 0));
-      this.parent.body.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
     }
     if (key === "q") {
       // _rotation.add(new Vector3(0, 0.1, 0));
-      this.parent.body.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
     }
     if (key === "d") {
       // _rotation.add(new Vector3(0, 0, -0.1));
-      this.parent.body.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
     }
     if (key === "a") {
       // _rotation.add(new Vector3(0, 0, 0.1));
-      this.parent.body.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
+      this.parent.ship.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
     }
   }
 }

@@ -12,8 +12,8 @@ export default class {
     ); //      ⭡y
     //       z ↙⭢ x
     scene.add(this.camera);
-    this.camera.position.z = 30; // *A* relative thanks to pov.add(this.camera);
-    this.camera.position.y = 10; // *A*
+    this.camera.position.z = 10; // *A* relative thanks to pov.add(this.camera);
+    this.camera.position.y = 2; // *A*
     pov.add(this.camera); // *A*
   }
   public update() {
