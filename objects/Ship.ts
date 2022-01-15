@@ -58,8 +58,7 @@ export default class {
     this.impulses[direction].speed +=
       this.impulses[direction].acceleration * sign;
   }
-  update() {
-    const _dt = dt();
+  update(dt: number) {
     for (const direction in this.impulses) {
       const impulse = this.impulses[direction];
       // impulse.speed -= impulse.drag;
@@ -72,23 +71,23 @@ export default class {
         ? 0
         : impulse.speed;
     }
-    this.object.translateZ(-this.impulses.forward.speed * _dt);
+    this.object.translateZ(-this.impulses.forward.speed * dt);
     this.object.rotateOnAxis(
       new Vector3(0, -1, 0),
-      this.impulses.yaw.speed * _dt
+      this.impulses.yaw.speed * dt
     );
     this.object.rotateOnAxis(
       new Vector3(1, 0, 0),
-      this.impulses.pitch.speed * _dt
+      this.impulses.pitch.speed * dt
     );
     this.object.rotateOnAxis(
       new Vector3(0, 0, -1),
-      this.impulses.roll.speed * _dt
+      this.impulses.roll.speed * dt
     );
     if (Math.random() > 0.9) {
       console.log(
         this.impulses.forward.speed
-        // _dt,
+        // dt,
         // Math.sign(this.impulses.forward.speed)
       );
       // console.log(this.impulses);

@@ -2,22 +2,26 @@ import { Vector3 } from "three";
 export default class {
   private parent;
   private keys = [
-    { key: "q", pressed: false },
-    { key: "w", pressed: false },
-    { key: "e", pressed: false },
-    { key: "a", pressed: false },
-    { key: "s", pressed: false },
-    { key: "d", pressed: false },
-    { key: " ", pressed: false },
+    { keys: ["w", "ArrowUp"], pressed: false },
+    { keys: ["s", "ArrowDown"], pressed: false },
+    { keys: ["a", "ArrowLeft"], pressed: false },
+    { keys: ["d", "ArrowRight"], pressed: false },
+    { keys: ["q"], pressed: false },
+    { keys: ["e"], pressed: false },
+    { keys: [" "], pressed: false },
   ];
-  private keysReserved = this.keys.map((k) => k.key);
-  private keyFind = (key) => this.keys.find((k) => k.key === key);
+  private keysReserved = [].concat.apply(
+    [],
+    this.keys.map((k) => k.keys)
+  );
+  private keyFind = (key) => this.keys.find((k) => k.keys.includes(key));
   constructor(parent) {
     this.parent = parent;
     document.body.addEventListener("keydown", this.keydown.bind(this), false);
     document.body.addEventListener("keyup", this.keyup.bind(this), false);
   }
   keydown(e) {
+    // console.log(e.key);
     const key = this.keyFind(e.key);
     if (!key) return;
     e.stopPropagation();
@@ -44,32 +48,8 @@ export default class {
       // matrixWorld: THREE.Matrix4;
       // quaternion: THREE.Quaternion;
     } = this.parent.ship.object;
-    // if (key === "w") {
-    //   // _rotation.add(new Vector3(-0.1, 0, 0));
-    //   ship.object.rotateOnAxis(new Vector3(-1, 0, 0), Math.PI / 32);
-    // }
-    // if (key === "s") {
-    //   // _rotation.add(new Vector3(0.1, 0, 0));
-    //   ship.object.rotateOnAxis(new Vector3(1, 0, 0), Math.PI / 32);
-    // }
-    // if (key === "e") {
-    //   // _rotation.add(new Vector3(0, -0.1, 0));
-    //   ship.object.rotateOnAxis(new Vector3(0, -1, 0), Math.PI / 32);
-    // }
-    // if (key === "q") {
-    //   // _rotation.add(new Vector3(0, 0.1, 0));
-    //   ship.object.rotateOnAxis(new Vector3(0, 1, 0), Math.PI / 32);
-    // }
-    // if (key === "d") {
-    //   // _rotation.ad       d(new Vector3(0, 0, -0.1));
-    //   ship.object.rotateOnAxis(new Vector3(0, 0, -1), Math.PI / 32);
-    // }
-    // if (key === "a") {
-    //   // _rotation.add(new Vector3(0, 0, 0.1));
-    //   ship.object.rotateOnAxis(new Vector3(0, 0, 1), Math.PI / 32);
-    // }
   }
-  public update() {
+  public update(dt: number) {
     const { ship } = this.parent;
     if (this.keyFind(" ").pressed) {
       ship.move("forward", 1);

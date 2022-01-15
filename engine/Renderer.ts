@@ -25,4 +25,3 @@ export const reset = () => {
   scene = new THREE.Scene();
 };
 export const clock = new THREE.Clock();
-export const dt = () => clock.getDelta();

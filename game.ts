@@ -1,9 +1,10 @@
 import Hero from "./entities/Hero";
 import * as THREE from "three";
-import { renderer, reset, scene } from "./engine/renderer";
+import { clock, dt, renderer, reset, scene } from "./engine/renderer";
 export const anaglyphMode = false;
 export default class Game {
   private hero;
+  private cubeSpinner;
   constructor() {
     reset();
     renderer.setAnimationLoop(this.loop.bind(this));
@@ -12,66 +13,42 @@ export default class Game {
     //
     // GUFF
     const geometry = new THREE.BoxGeometry(20, 20, 20);
-    const cube1 = new THREE.Mesh(
+    this.cubeSpinner = new THREE.Mesh(
       geometry,
       new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide, // debug only
         color: 0x00aa55,
       })
     );
-    cube1.castShadow = true;
-    cube1.receiveShadow = true;
-    cube1.position.set(0, 0, -100);
-    scene.add(cube1);
-    //
-    const cube2 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshPhongMaterial({
-        side: THREE.DoubleSide, // debug only
-        color: 0xff0000,
-      })
-    );
-    cube2.castShadow = true;
-    cube2.receiveShadow = true;
-    cube2.position.set(-100, 0, 0);
-    scene.add(cube2);
-    //
-    const cube3 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshPhongMaterial({
-        side: THREE.DoubleSide, // debug only
-        color: 0x0000ff,
-      })
-    );
-    cube3.castShadow = true;
-    cube3.receiveShadow = true;
-    cube3.position.set(100, 0, 0);
-    scene.add(cube3);
-    //
-    const cube4 = new THREE.Mesh(
-      geometry,
-      new THREE.MeshPhongMaterial({
-        side: THREE.DoubleSide, // debug only
-        color: 0xffff00,
-      })
-    );
-    cube4.castShadow = true;
-    cube4.receiveShadow = true;
-    cube4.position.set(0, 0, 100);
-    scene.add(cube4);
+    this.cubeSpinner.castShadow = true;
+    this.cubeSpinner.receiveShadow = true;
+    this.cubeSpinner.position.set(0, 0, -100);
+    scene.add(this.cubeSpinner);
+    for (let i = 0; i < 100; i++) {
+      const cube = new THREE.Mesh(
+        geometry,
+        new THREE.MeshPhongMaterial({
+          side: THREE.DoubleSide, // debug only
+          color: 0xff0000,
+        })
+      );
+      cube.castShadow = true;
+      cube.receiveShadow = true;
+      cube.position.set(
+        Math.random() * 1000 - 500,
+        Math.random() * 1000 - 500,
+        Math.random() * 1000 - 500
+      );
+      scene.add(cube);
+    }
     //
     const lightAmbient = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(lightAmbient);
-    //
-    setInterval(() => {
-      // cube1.rotation.set(0, cube1.rotation.y + 10, 0);
-      cube1.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 320);
-      cube1.rotation.order = "YXZ";
-      // console.log(cube1.rotation);
-    }, 100);
   }
   loop(time) {
-    this.hero.update();
+    const dt = clock.getDelta(); // Always use this
+    this.hero.update(dt);
     renderer.render(scene, this.hero.cam.camera);
+    this.cubeSpinner.rotateOnAxis(new THREE.Vector3(0, 1, 0), dt * 0.5);
   }
 }

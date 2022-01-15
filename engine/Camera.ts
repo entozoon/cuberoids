@@ -16,7 +16,7 @@ export default class {
     this.camera.position.y = 2; // *A*
     pov.add(this.camera); // *A*
   }
-  public update() {
+  public update(dt: number) {
     let { position, rotation } = this.pov.clone();
     // const rotationUnit = rotation.toVector3().normalize();
     // const x =
