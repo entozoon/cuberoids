@@ -12,7 +12,7 @@ const createTorch = () => {
 };
 export default class {
   public object: THREE.Object3D;
-  public camera;
+  public camera: THREE.Camera;
   private torch;
   private impulses = {
     forward: {
@@ -61,13 +61,17 @@ export default class {
   }
   public fire() {
     const raycaster = new THREE.Raycaster();
+    // Probs work different when I get it casting to the plane mesh
+    // raycaster.params.Line.threshold = 999;
+    // raycaster.params.Points.threshold = 999;
     raycaster.setFromCamera(new Vector3(0, 0, 0), this.camera);
+    console.log(this.camera);
     const intersects = raycaster.intersectObjects(scene.children);
     // intersects.forEach((intersect) => {
     //   intersect.object?.material?.color.set(0xffffff);
     // });
-    intersects[0]?.object.material?.color.set(0xffffff);
     console.log(intersects);
+    intersects[0]?.object.material?.color.set(0xffffff);
   }
   update(dt: number) {
     for (const direction in this.impulses) {

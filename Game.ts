@@ -48,7 +48,7 @@ export default class Game {
   loop(time) {
     const dt = clock.getDelta(); // Always use this
     this.hero.update(dt);
-    renderer.render(scene, this.hero.cam.camera);
+    renderer.render(scene, this.hero.camHero.camera);
     this.cubeSpinner.rotateOnAxis(new THREE.Vector3(0, 1, 0), dt * 0.5);
   }
 }

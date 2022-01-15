@@ -3,21 +3,31 @@ import { Vector3 } from "three";
 import { scene } from "./Renderer";
 export default class {
   public camera: THREE.Camera;
+  public cameraShip: THREE.Camera;
   pov: THREE.Object3D;
-  constructor({ pov }: { pov: THREE.Object3D }) {
+  constructor({
+    pov,
+    offset,
+    addToScene,
+  }: {
+    pov?: THREE.Object3D;
+    offset?: { x: number; y: number; z: number };
+    addToScene: boolean;
+  }) {
     this.pov = pov;
     this.camera = new THREE.PerspectiveCamera(
       70,
       window.innerWidth / window.innerHeight
     ); //      ⭡y
     //       z ↙⭢ x
-    scene.add(this.camera);
-    this.camera.position.z = 10; // *A* relative thanks to pov.add(this.camera);
-    this.camera.position.y = 2; // *A*
-    pov.add(this.camera); // *A*
+    addToScene && scene.add(this.camera);
+    this.camera.position.x = offset?.x || 0; // *A*
+    this.camera.position.y = offset?.y || 0; // *A*
+    this.camera.position.z = offset?.z || 0; // *A*
+    pov?.add(this.camera); // *A*
   }
   public update(dt: number) {
-    let { position, rotation } = this.pov.clone();
+    // let { position, rotation } = this.pov?.clone();
     // const rotationUnit = rotation.toVector3().normalize();
     // const x =
     //   position.x + Math.sin(rotation.y) * 30 + Math.sin(rotation.x) * 30;
