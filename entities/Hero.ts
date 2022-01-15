@@ -3,7 +3,9 @@ import Controllable from "../behaviours/Controllable";
 import Camera from "../engine/Camera";
 import Ship from "../objects/Ship";
 export default class {
-  public ship = new Ship();
+  public ship = new Ship({
+    offset: { x: 0, y: 0, z: 50 },
+  });
   public camHero = new Camera({
     pov: this.ship.object,
     offset: { x: 0, y: 2, z: 10 },

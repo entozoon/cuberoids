@@ -2,6 +2,9 @@ import { scene } from "../engine/Renderer";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { between } from "../lib/utils";
+// import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
+// import { Line2 } from "three/examples/jsm/lines/Line2.js";
+// import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 const createTorch = () => {
   //  SpotLight / DirectionalLight / PointLight
   const torch = new THREE.SpotLight(0xffffff, 1);
@@ -36,10 +39,10 @@ export default class {
       drag: 0.1,
     },
   };
-  constructor() {
-    const geometry = new THREE.BoxGeometry(6, 1, 2);
+  constructor({ offset }: { offset?: { x: number; y: number; z: number } }) {
+    const shipGeometry = new THREE.BoxGeometry(6, 1, 2);
     this.object = new THREE.Mesh(
-      geometry,
+      shipGeometry,
       new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide, // debug only
         color: 0xaaaaaa,
@@ -48,12 +51,65 @@ export default class {
     );
     this.object.castShadow = true;
     this.object.receiveShadow = true;
+    this.object.position.x = offset?.x || 0;
+    this.object.position.y = offset?.y || 0;
+    this.object.position.z = offset?.z || 0;
     scene.add(this.object);
     this.torch = createTorch();
+    // offset from this.object (ship)
     this.torch.position.z = -5;
     this.torch.target.position.z = -20;
     this.object.add(this.torch, this.torch.target);
+    //
     // scene.add(new THREE.CameraHelper(this.torch.shadow.camera)); // ***
+    // //
+    // const lineMaterial = new LineMaterial({
+    //   color: 0x00ffff,
+    //   linewidth: 0.2, // in world units with size attenuation, pixels otherwise
+    //   vertexColors: true,
+    //   //resolution:  // to be set by renderer, eventually
+    //   dashed: false,
+    //   alphaToCoverage: true,
+    //   wireframe: true,
+    // });
+    // const color1 = new THREE.Color(0xffaa00);
+    // const color2 = new THREE.Color(0x00aaff);
+    // console.log(color1);
+    // const positions = [];
+    // positions.push(0, 0, 0);
+    // // positions.push(100, 0, 0);
+    // // positions.push(100, 100, 0);
+    // positions.push(100, 100, 100);
+    // // const lineGeometry = new THREE.BufferGeometry().setFrompositions(positions);
+    // const lineGeometry = new LineGeometry();
+    // lineGeometry.setPositions(positions);
+    // lineGeometry.setColors([
+    //   color1.r,
+    //   color1.g,
+    //   color1.b,
+    //   color2.r,
+    //   color2.g,
+    //   color2.b,
+    // ]);
+    // const line = new Line2(lineGeometry, lineMaterial);
+    // line.computeLineDistances();
+    // line.scale.set(1, 1, 1);
+    // scene.add(line);
+    // // const line = new THREE.Line(lineGeometry, material);
+    // // scene.add(line);
+    const cylinderMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffaa00,
+    });
+    const cylinderGeometry = new THREE.CylinderBufferGeometry(
+      ...Object.values({
+        radiusTop: 4,
+        radiusBottom: 4,
+        height: 10,
+        radialSegments: 3,
+      })
+    );
+    const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+    scene.add(cylinder);
   }
   public move(direction, sign = 1) {
     this.impulses[direction].speed +=

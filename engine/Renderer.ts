@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { AnaglyphEffect } from "./AnaglyphEffect.js";
+import { AnaglyphEffect } from "three/examples/jsm/effects/AnaglyphEffect.js";
 import { anaglyphMode } from "../Game";
 const Renderer = () => {
   const renderer = new THREE.WebGLRenderer({
