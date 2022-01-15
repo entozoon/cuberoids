@@ -9,6 +9,7 @@ export default class {
     { keys: ["q"], pressed: false },
     { keys: ["e"], pressed: false },
     { keys: [" "], pressed: false },
+    { keys: ["z"], pressed: false },
   ];
   private keysReserved = [].concat.apply(
     [],
@@ -71,6 +72,9 @@ export default class {
     }
     if (this.keyFind("d").pressed) {
       ship.move("roll", 1);
+    }
+    if (this.keyFind("z").pressed) {
+      ship.fire();
     }
   }
 }

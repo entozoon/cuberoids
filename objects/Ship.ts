@@ -12,6 +12,7 @@ const createTorch = () => {
 };
 export default class {
   public object: THREE.Object3D;
+  public camera;
   private torch;
   private impulses = {
     forward: {
@@ -58,6 +59,16 @@ export default class {
     this.impulses[direction].speed +=
       this.impulses[direction].acceleration * sign;
   }
+  public fire() {
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new Vector3(0, 0, 0), this.camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    // intersects.forEach((intersect) => {
+    //   intersect.object?.material?.color.set(0xffffff);
+    // });
+    intersects[0]?.object.material?.color.set(0xffffff);
+    console.log(intersects);
+  }
   update(dt: number) {
     for (const direction in this.impulses) {
       const impulse = this.impulses[direction];
@@ -84,13 +95,13 @@ export default class {
       new Vector3(0, 0, -1),
       this.impulses.roll.speed * dt
     );
-    if (Math.random() > 0.9) {
-      console.log(
-        this.impulses.forward.speed
-        // dt,
-        // Math.sign(this.impulses.forward.speed)
-      );
-      // console.log(this.impulses);
-    }
+    // if (Math.random() > 0.9) {
+    //   console.log(
+    //     this.impulses.forward.speed
+    //     // dt,
+    //     // Math.sign(this.impulses.forward.speed)
+    //   );
+    //   // console.log(this.impulses);
+    // }
   }
 }

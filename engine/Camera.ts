@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { Vector3 } from "three";
 import { scene } from "./Renderer";
 export default class {
-  camera: THREE.Camera;
+  public camera: THREE.Camera;
   pov: THREE.Object3D;
   constructor({ pov }: { pov: THREE.Object3D }) {
     this.pov = pov;

@@ -5,6 +5,9 @@ export default class {
   public ship = new Ship();
   public cam = new Camera({ pov: this.ship.object });
   public controls = new Controllable(this);
+  constructor() {
+    this.ship.camera = this.cam.camera;
+  }
   public update(dt: number) {
     this.ship.update(dt);
     this.controls.update(dt);
