@@ -21,18 +21,18 @@ export default class {
     },
     yaw: {
       speed: 0,
-      acceleration: 0.1,
-      drag: 0.05,
+      acceleration: 0.2,
+      drag: 0.1,
     },
     pitch: {
       speed: 0,
-      acceleration: 0.1,
-      drag: 0.05,
+      acceleration: 0.2,
+      drag: 0.1,
     },
     roll: {
       speed: 0,
-      acceleration: 0.1,
-      drag: 0.05,
+      acceleration: 0.2,
+      drag: 0.1,
     },
   };
   constructor() {
