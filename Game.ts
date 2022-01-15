@@ -1,6 +1,6 @@
 import Hero from "./entities/Hero";
 import * as THREE from "three";
-import { clock, dt, renderer, reset, scene } from "./engine/Renderer";
+import { clock, renderer, reset, scene } from "./engine/Renderer";
 export const anaglyphMode = false;
 export default class Game {
   private hero;

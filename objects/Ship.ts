@@ -1,4 +1,4 @@
-import { dt, dt, scene } from "../engine/Renderer";
+import { scene } from "../engine/Renderer";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import { between } from "../lib/utils";
