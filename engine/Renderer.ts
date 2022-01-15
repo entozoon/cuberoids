@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { AnaglyphEffect } from "./AnaglyphEffect.js";
-import { anaglyphMode } from "../game";
+import { anaglyphMode } from "../Hame";
 const Renderer = () => {
   const renderer = new THREE.WebGLRenderer({
     antialias: true,

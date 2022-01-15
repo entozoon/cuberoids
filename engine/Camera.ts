@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Vector3 } from "three";
-import { scene } from "./renderer";
+import { scene } from "./Renderer";
 export default class {
   camera: THREE.Camera;
   pov: THREE.Object3D;
